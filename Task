@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Հաճախորդների տվյալներ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+            font-size: 35px;
+        }
+        p {
+            color: brown;
+            font-size: 20px;
+        }
+        ul {
+            background-color: yellow;
+            padding: 10px;
+        }
+        li:last-child {
+            color: red;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+        .button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+    <script>
+        function showDate() {
+            const currentDate = new Date();
+            alert("Այսօրվա ամսաթիվը: " + currentDate.toLocaleDateString('hy-AM'));
+        }
+
+        function reloadPage() {
+            location.reload();
+        }
+
+        function addInputFields() {
+            const container = document.getElementById('inputFieldsContainer');
+
+            // Create input fields
+            const nameInput = createInput('text', 'Անուն, Ազգանուն');
+            const sexInput = createInput('text', 'Սեռ');
+            const birthDateInput = createInput('date', 'Ծննդյան տարեթիվ');
+
+            // Append the new input fields to the container
+            container.appendChild(nameInput);
+            container.appendChild(sexInput);
+            container.appendChild(birthDateInput);
+            container.appendChild(document.createElement('br'));
+        }
+
+        function createInput(type, placeholder) {
+            const input = document.createElement('input');
+            input.setAttribute('type', type);
+            input.setAttribute('placeholder', placeholder);
+            input.required = true; // Ensure fields are filled
+            return input;
+        }
+
+        function saveData() {
+            const container = document.getElementById('inputFieldsContainer');
+            const inputs = container.getElementsByTagName('input');
+
+            // Check if we have sets of three inputs
+            if (inputs.length % 3 !== 0) {
+                alert("Please ensure all fields are filled before saving.");
+                return;
+            }
+
+            const tableBody = document.querySelector('table tbody');
+
+            for (let i = 0; i < inputs.length; i += 3) {
+                const name = inputs[i].value;
+                const sex = inputs[i + 1].value;
+                const birthDate = inputs[i + 2].value;
+                const age = new Date().getFullYear() - new Date(birthDate).getFullYear();
+
+                const newRow = `<tr>
+                    <td>${name}</td>
+                    <td>${sex}</td>
+                    <td>${birthDate}</td>
+                    <td>${age}</td>
+                </tr>`;
+        
+                tableBody.insertAdjacentHTML('beforeend', newRow);
+            }
+
+            container.innerHTML = ''; // Clear input fields
+        }
+    </script>
+</head>
+<body>
+    <h1>Հաճախորդների տվյալներ</h1>
+    <p>Տվյալ Էջը պարունակում է հաճախորդների վերաբերյալ հետևյալ տեղեկատվությունը</p>
+    <ul>
+        <li>Անուն, Ազգանուն</li>
+        <li>Սեռ</li>
+        <li>Տարիք</li>
+    </ul>
+    
+    <a href="https://web/" target="_blank">Հղում դեպի կայք</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Անուն, Ազգանուն</th>
+                <th>Սեռ</th>
+                <th>Ծննդյան տարեթիվ</th>
+                <th>Տարիք</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ալեն Ալավերդյան</td>
+                <td>Արական</td>
+                <td>2000-06-18</td>
+                <td>24</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <div class="button-container">
+        <button onclick="saveData()">Պահպանել</button>
+        <button onclick="reloadPage()">Թարմացնել</button>
+        <button onclick="addInputFields()">Ավելացնել</button>
+        <br>
+        <button onclick="showDate()">Ցուցադրել ընթացիկ ամսաթիվը</button>
+    </div>
+
+    <div id="inputFieldsContainer"></div>
+</body>
+</html>
